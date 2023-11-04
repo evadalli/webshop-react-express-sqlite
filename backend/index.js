@@ -3,6 +3,8 @@
 
 import  express  from "express";
 
+import cors from "cors";
+
 // az adatok adatbazisbol valo betoltesere
 import  sqlite3  from "sqlite3";
 
@@ -11,6 +13,10 @@ const db = new sqlite3.Database("webshop.db");
 
 // server inicializalasa
 const app = express();
+
+// cors factory fuggveny, amieloallit egy express.js middleware-t, ami engedelyezi a cors-t
+// - ez kell ahhoz, hogy a 3000-es porton futo frontend kommunikalni tudjon a 8000-es porton futo backend-del
+app.use(cors());
 
 // server elinditasa megadott porton
 app.listen(8000);
