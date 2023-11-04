@@ -18,6 +18,10 @@ const app = express();
 // - ez kell ahhoz, hogy a 3000-es porton futo frontend kommunikalni tudjon a 8000-es porton futo backend-del
 app.use(cors());
 
+//post request body parser-hez 
+// - http request body json felolvasasara kepes middleware regisztracioja (factory fuggveny)
+app.use(express.json());
+
 // server elinditasa megadott porton
 app.listen(8000);
 
@@ -33,7 +37,22 @@ app.get("/products", (request, response) => {
       }, () => response.send(JSON.stringify(products))
     );
 });
+// git commmit: backend: get /products
+
+//request objektum body kulcsan talalhato objektum ~ termek objektum kulcsai
+app.post("/products", (request, response) => {
+  
+  //sql injection megelozese erdekeben prepare statement-et hasznalunk kozvetlen sql futtatas helyett
+  // - fontos, hogy ne konkatenaljuk be a parametereket
+  // - hanem a preare statement-re hagyjuk ra a parameterek illeszteset
+  // - kulonben ugyanugy erzekeny lesz sql injection-re
+  const stmt = db.prepare(`INSERT INTO products (name, price) VALUES (?, ?)`);
+  stmt.run(request.body.name, request.body.price, (err) => {
+    response.send("OK")
+  } );
+
+})
+// git commit: backend: post products api
 
 // teszteles: valami valaszt kuldjunk vissza
 // command-line: node index.js, server elinditasa, bongeszo, postman etc.
-// git commmit: backend: get /products
