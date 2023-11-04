@@ -28,3 +28,8 @@ db.serialize(() => {
 parancssor: node dbinit.js*/
 
 /*download sqlite command-line tools, open sqlite, command-line: .open webshop.db, .tables*/
+
+// .gitignore: **/ node_modules - barhol van node modules, azt ignoralja 
+
+/* git commit: "backend: dbinit" */
+
