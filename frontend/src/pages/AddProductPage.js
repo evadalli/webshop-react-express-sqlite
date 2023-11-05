@@ -51,3 +51,4 @@ export default function AddProductPage() {
       </>
     );
 }
+// git commit: "frontend: handle status code"
