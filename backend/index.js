@@ -41,13 +41,14 @@ app.get("/products", (request, response) => {
           errorMessage = "database error";
           statusCode = 500;
         }
-        response.status(statusCode).send(JSON.stringify({err: errorMessage, data: products}))}
+        response.status(statusCode).send(JSON.stringify({ err: errorMessage, data: products, statusCode: statusCode }))}
     );
 });
 // git commmit: backend: get /products
 
 //request objektum body kulcsan talalhato objektum ~ termek objektum kulcsai
 app.post("/products", (request, response) => {
+  console.log(request.body)
   let statusCode = 200;
   let errorMessage = ""
   let responseBody = { name: request.body.name, price: request.body.price }
@@ -63,7 +64,7 @@ app.post("/products", (request, response) => {
     statusCode = 400;
     response
       .status(statusCode)
-      .send(JSON.stringify({ err: errorMessage, data: responseBody }));
+      .send(JSON.stringify({ err: errorMessage, data: responseBody, statusCode: statusCode }));
       return;
   }
   //sql injection megelozese erdekeben prepare statement-et hasznalunk kozvetlen sql futtatas helyett
@@ -84,7 +85,7 @@ app.post("/products", (request, response) => {
       // masodik a changes (hany modositas lett, pl.: forEach-en belul tobb sor is lehet erintett)
       responseBody.id = this.lastID;
     }
-    response.status(statusCode).send(JSON.stringify( { err: errorMessage, data: responseBody }))
+    response.status(statusCode).send(JSON.stringify( { err: errorMessage, data: responseBody, statusCode: statusCode }))
   } );
 
 })

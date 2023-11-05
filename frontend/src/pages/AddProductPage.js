@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 
 export default function AddProductPage() {
@@ -21,8 +21,17 @@ export default function AddProductPage() {
                 price: price
             })
         })
-        .then(resp => resp.text())
-        .then(resp => console.log(resp))
+        .then(resp => resp.json())
+        .then(resp => {
+          if(resp.statusCode !== 200) {
+            alert(resp.err)
+          } else {
+            alert("Sikeres feltoltes!");
+            setName("");
+            setPrice("");
+          }
+        }
+          )
     }
 
 
@@ -31,11 +40,11 @@ export default function AddProductPage() {
         <form>
           <p>
             <label>name</label>
-            <input type="text" onInput={(e) => setName(e.target.value)} />
+            <input type="text" value={name} onInput={(e) => setName(e.target.value)} />
           </p>
           <p>
             <label>price</label>
-            <input type="text" onInput={(e) => setPrice(e.target.value)} />
+            <input type="text" value={price} onInput={(e) => setPrice(Number(e.target.value))} />
           </p>
           <button onClick={onAddProduct}>Add Product</button>
         </form>
