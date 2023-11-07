@@ -42,19 +42,39 @@ app.get("/products", (request, response) => {
         errorMessage = "database error";
         statusCode = 500;
       }
-      response
-        .status(statusCode)
-        .send(
-          JSON.stringify({
-            err: errorMessage,
-            data: products,
-            statusCode: statusCode,
-          })
-        );
+      response.status(statusCode).send(
+        JSON.stringify({
+          err: errorMessage,
+          data: products,
+          statusCode: statusCode,
+        })
+      );
     }
   );
 });
+
 // git commmit: backend: get /products
+
+app.get("/products/:id", (request, response) => {
+  console.log(request);
+  const id = request.params.id;
+  db.get("SELECT * FROM products WHERE id=?", id, (err, row) => {
+    let statusCode = 200;
+    let errorMessage = "";
+    if (err) {
+      //err object tartalmazhat erzekeny adatokat, ezert ne azt adjuk at a frontendnek
+      errorMessage = "database error";
+      statusCode = 500;
+    }
+    response.status(statusCode).send(
+      JSON.stringify({
+        err: errorMessage,
+        data: row,
+        statusCode: statusCode,
+      })
+    );
+  });
+});
 
 //request objektum body kulcsan talalhato objektum ~ termek objektum kulcsai
 app.post("/products", (request, response) => {
@@ -74,15 +94,13 @@ app.post("/products", (request, response) => {
   ) {
     errorMessage = "validation error";
     statusCode = 400;
-    response
-      .status(statusCode)
-      .send(
-        JSON.stringify({
-          err: errorMessage,
-          data: responseBody,
-          statusCode: statusCode,
-        })
-      );
+    response.status(statusCode).send(
+      JSON.stringify({
+        err: errorMessage,
+        data: responseBody,
+        statusCode: statusCode,
+      })
+    );
     return;
   }
   //sql injection megelozese erdekeben prepare statement-et hasznalunk kozvetlen sql futtatas helyett
@@ -102,15 +120,13 @@ app.post("/products", (request, response) => {
       // masodik a changes (hany modositas lett, pl.: forEach-en belul tobb sor is lehet erintett)
       responseBody.id = this.lastID;
     }
-    response
-      .status(statusCode)
-      .send(
-        JSON.stringify({
-          err: errorMessage,
-          data: responseBody,
-          statusCode: statusCode,
-        })
-      );
+    response.status(statusCode).send(
+      JSON.stringify({
+        err: errorMessage,
+        data: responseBody,
+        statusCode: statusCode,
+      })
+    );
   });
 });
 // git commit: backend: post products api
@@ -126,7 +142,7 @@ app.delete("/products/:id", function (request, response) {
   let statusCode = 200;
   let responseBody = { id: id, message: "Sikeres torles" };
 
-  const stmt= db.prepare(`DELETE FROM products WHERE id=?`);
+  const stmt = db.prepare(`DELETE FROM products WHERE id=?`);
   stmt.run(id, function (err) {
     if (err) {
       errorMessage = "database error";

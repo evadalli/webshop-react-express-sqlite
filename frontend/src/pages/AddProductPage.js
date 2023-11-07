@@ -11,6 +11,8 @@ export default function AddProductPage() {
         //a response-ban erkezett adatiokkala react ujrarendereli az oldalt
         //ezt a default mukodest elozzuk meg
         e.preventDefault();
+
+        // kattintas mellekhatasakent esedekes fetch, nem a betoltes mellekhatasakent, ezert nem useEffect
         fetch('http://localhost:8000/products', {
             headers: {
                 "Content-Type": "application/json"
